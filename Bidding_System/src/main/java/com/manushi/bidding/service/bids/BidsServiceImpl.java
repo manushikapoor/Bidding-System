@@ -1,6 +1,7 @@
 package com.manushi.bidding.service.bids;
 
 import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_BID_AMOUNT;
+import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_PRODUCT_NOT_ACTIVE;
 import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_PRODUCT_NOT_FOUND;
 import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_USER_NOT_FOUND;
 
@@ -53,6 +54,9 @@ public class BidsServiceImpl implements BidsService {
 		Users user = usersRepository.findById(bidRequestVO.getUserId())
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_USER_NOT_FOUND + bidRequestVO.getUserId()));
 
+		if (!product.getBidStartTime().isBefore(LocalDateTime.now()) || !product.getBidEndTime().isAfter(LocalDateTime.now())) {
+			throw new InvalidRequestException(ERROR_MESSAGE_PRODUCT_NOT_ACTIVE);
+		}
 		if (bidRequestVO.getAmount().compareTo(product.getBasePrice()) < 0) {
 			throw new InvalidRequestException(ERROR_MESSAGE_BID_AMOUNT);
 		}

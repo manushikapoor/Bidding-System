@@ -23,6 +23,7 @@ public class Constants {
 	public static final String ERROR_MESSAGE_DATABASE_EXCEPTION = "Expected data could not be retrieved due to database exception";
 	public static final String ERROR_MESSAGE_INVALID_DATES = "Invalid dates";
 	public static final String ERROR_MESSAGE_PRODUCT_NOT_FOUND = "Product not found";
+	public static final String ERROR_MESSAGE_PRODUCT_NOT_ACTIVE = "Product not up for bidding yet";
 	public static final String ERROR_MESSAGE_BID_AMOUNT = "Bid amount can't be less than the product base price";
 	public static final String ERROR_MESSAGE_USER_NOT_FOUND = "User not found";
 

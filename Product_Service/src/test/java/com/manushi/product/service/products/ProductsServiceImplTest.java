@@ -119,7 +119,7 @@ public class ProductsServiceImplTest {
 
 		// Act & Assert
 		DataNotFoundException exception = assertThrows(DataNotFoundException.class, () -> productService.getAllProductsByCategory("TestCategory"));
-		assertEquals("Category not found with name: TestCategory", exception.getMessage());
+		assertEquals("Category not foundTestCategory", exception.getMessage());
 	}
 
 	@Test

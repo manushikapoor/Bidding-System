@@ -29,8 +29,6 @@ public class ProductServiceImpl implements ProductService {
 	public void sendMailToWinners(LocalDateTime currentTime) {
 		List<Products> products = productRepository.findProductsByStatusAndBidEndTimeLessThan("ACTIVE", currentTime);
 		for (Products product : products) {
-//			product.setStatus("INACTIVE");
-//			productRepository.save(product);
 
 			// Fetch the winning bid and notify users
 			Auctions winningBid = auctionRepository.findByProduct(product);

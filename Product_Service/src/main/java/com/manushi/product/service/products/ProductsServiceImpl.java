@@ -83,7 +83,7 @@ public class ProductsServiceImpl implements ProductsService {
 	public List<ProductVO> getAllProductsByCategory(String categoryName) {
 		Category category = categoryRepository.findByName(categoryName);
 		if (category == null) {
-			throw new DataNotFoundException("Category not found with name: " + categoryName);
+			throw new DataNotFoundException(ERROR_MESSAGE_CATEGORY_NOT_FOUND + categoryName);
 		}
 		List<Products> products = productsRepository.findByCategoryAndBidStartTimeLessThanEqualAndBidEndTimeGreaterThanEqual(category,
 				LocalDateTime.now(), LocalDateTime.now());

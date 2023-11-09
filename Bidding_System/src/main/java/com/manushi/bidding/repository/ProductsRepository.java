@@ -9,6 +9,6 @@ import com.manushi.bidding.repository.entity.Products;
 
 public interface ProductsRepository extends JpaRepository<Products, Long> {
 
-	List<Products> findProductsByStatusAndBidEndTimeLessThan(String status, LocalDateTime currentTime);
+	List<Products> findProductsByStatusAndBidEndTimeLessThan(String status, LocalDateTime currentTimeForEndDate);
 
 }

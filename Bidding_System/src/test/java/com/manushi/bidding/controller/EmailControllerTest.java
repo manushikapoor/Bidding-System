@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import com.manushi.bidding.model.request.SendGridEmailMessage;
-import com.manushi.bidding.service.email.SendGridEmailProducerImpl;
+import com.manushi.bidding.service.email.EmailProducerImpl;
 import com.manushi.bidding.service.products.ProductServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -24,7 +24,7 @@ public class EmailControllerTest {
 	private EmailController emailController;
 
 	@Mock
-	private SendGridEmailProducerImpl emailProducer;
+	private EmailProducerImpl emailProducer;
 
 	@Mock
 	private ProductServiceImpl productServiceImpl;

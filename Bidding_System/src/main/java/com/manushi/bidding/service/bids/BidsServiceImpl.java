@@ -1,7 +1,5 @@
 package com.manushi.bidding.service.bids;
 
-import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_BID_AMOUNT;
-import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_PRODUCT_NOT_ACTIVE;
 import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_PRODUCT_NOT_FOUND;
 import static com.manushi.bidding.util.Constants.ERROR_MESSAGE_USER_NOT_FOUND;
 
@@ -15,7 +13,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.manushi.bidding.exceptions.DataNotFoundException;
-import com.manushi.bidding.exceptions.InvalidRequestException;
 import com.manushi.bidding.model.request.BidRequestVO;
 import com.manushi.bidding.model.response.BidVO;
 import com.manushi.bidding.repository.AuctionRepository;
@@ -26,6 +23,7 @@ import com.manushi.bidding.repository.entity.Auctions;
 import com.manushi.bidding.repository.entity.Bids;
 import com.manushi.bidding.repository.entity.Products;
 import com.manushi.bidding.repository.entity.Users;
+import com.manushi.bidding.util.RequestValidator;
 
 import lombok.AllArgsConstructor;
 
@@ -45,6 +43,9 @@ public class BidsServiceImpl implements BidsService {
 	@Autowired
 	private final UsersRepository usersRepository;
 
+	@Autowired
+	private final RequestValidator requestValidator;
+
 	@Override
 	@Transactional
 	public void createBid(BidRequestVO bidRequestVO) {
@@ -54,12 +55,8 @@ public class BidsServiceImpl implements BidsService {
 		Users user = usersRepository.findById(bidRequestVO.getUserId())
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_USER_NOT_FOUND + bidRequestVO.getUserId()));
 
-		if (!product.getBidStartTime().isBefore(LocalDateTime.now()) || !product.getBidEndTime().isAfter(LocalDateTime.now())) {
-			throw new InvalidRequestException(ERROR_MESSAGE_PRODUCT_NOT_ACTIVE);
-		}
-		if (bidRequestVO.getAmount().compareTo(product.getBasePrice()) < 0) {
-			throw new InvalidRequestException(ERROR_MESSAGE_BID_AMOUNT);
-		}
+		requestValidator.validateBidRequestVO(bidRequestVO.getAmount(), product.getBidStartTime(), product.getBidEndTime(), product.getBasePrice());
+
 		Bids bid = Bids.builder().product(product).user(user).amount(bidRequestVO.getAmount()).bidStartTime(LocalDateTime.now()).build();
 
 		bidsRepository.save(bid);

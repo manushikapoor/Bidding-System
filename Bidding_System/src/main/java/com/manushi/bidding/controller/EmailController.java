@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.manushi.bidding.model.request.SendGridEmailMessage;
-import com.manushi.bidding.service.email.SendGridEmailProducerImpl;
+import com.manushi.bidding.service.email.EmailProducerImpl;
 import com.manushi.bidding.service.products.ProductServiceImpl;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,7 +30,7 @@ import lombok.AllArgsConstructor;
 public class EmailController {
 
 	@Autowired
-	private final SendGridEmailProducerImpl emailProducer;
+	private final EmailProducerImpl emailProducer;
 
 	@Autowired
 	private final ProductServiceImpl productServiceImpl;

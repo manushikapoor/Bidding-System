@@ -82,7 +82,7 @@ public class CustomExceptionsHandler {
 	public final ResponseEntity<ErrorVO> handleDataNotFoundException(DataNotFoundException ex) {
 		log.info("DataNotFoundException occurred - message: [{}], error code: [{}]", ex.getMessage(), ERROR_CODE_DATA_NOT_FOUND_EXCEPTION);
 		return ResponseEntity.status(HttpStatus.NOT_FOUND)
-				.body(buildErrorResponse(new DuplicateDataException(ex.getMessage()), ERROR_CODE_DUPLICATE_DATA_EXCEPTION));
+				.body(buildErrorResponse(new DataNotFoundException(ex.getMessage()), ERROR_CODE_DUPLICATE_DATA_EXCEPTION));
 	}
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)

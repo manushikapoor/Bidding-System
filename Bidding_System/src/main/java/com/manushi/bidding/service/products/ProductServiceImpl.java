@@ -11,7 +11,7 @@ import com.manushi.bidding.repository.AuctionRepository;
 import com.manushi.bidding.repository.ProductsRepository;
 import com.manushi.bidding.repository.entity.Auctions;
 import com.manushi.bidding.repository.entity.Products;
-import com.manushi.bidding.service.email.SendGridEmailProducerImpl;
+import com.manushi.bidding.service.email.EmailProducerImpl;
 
 @Service
 public class ProductServiceImpl implements ProductService {
@@ -20,7 +20,7 @@ public class ProductServiceImpl implements ProductService {
 	private ProductsRepository productRepository;
 
 	@Autowired
-	private SendGridEmailProducerImpl emailService;
+	private EmailProducerImpl emailService;
 
 	@Autowired
 	private AuctionRepository auctionRepository;
@@ -32,13 +32,14 @@ public class ProductServiceImpl implements ProductService {
 
 			// Fetch the winning bid and notify users
 			Auctions winningBid = auctionRepository.findByProduct(product);
+			if (winningBid != null) {
+				SendGridEmailMessage emailMessage = new SendGridEmailMessage();
+				emailMessage.setTo(winningBid.getUserId().getEmail()); // Set the winner's email
+				emailMessage.setSubject("You won the bid for " + product.getName());
+				emailMessage.setContent("Congratulations! You won the bid for " + product.getName() + ".");
 
-			SendGridEmailMessage emailMessage = new SendGridEmailMessage();
-			emailMessage.setTo(winningBid.getUserId().getEmail()); // Set the winner's email
-			emailMessage.setSubject("You won the bid for " + product.getName());
-			emailMessage.setContent("Congratulations! You won the bid for " + product.getName() + ".");
-
-			emailService.sendEmail(emailMessage);
+				emailService.sendEmail(emailMessage);
+			}
 
 		}
 	}

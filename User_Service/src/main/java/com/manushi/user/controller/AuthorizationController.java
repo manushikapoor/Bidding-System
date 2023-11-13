@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.manushi.user.model.request.UserSignInRequestVO;
 import com.manushi.user.model.request.UserSignUpRequestVO;
 import com.manushi.user.model.response.JwtResponse;
-import com.manushi.user.model.response.UserDetailsVO;
+import com.manushi.user.model.response.OperationSuccessVO;
 import com.manushi.user.service.auth.AuthorizationService;
 
 import io.swagger.annotations.Api;
@@ -38,8 +38,9 @@ public class AuthorizationController {
 
 	@PostMapping(SIGNUP)
 	@ApiOperation(value = "Get a greeting message", notes = "Returns a simple greeting message.")
-	public ResponseEntity<UserDetailsVO> signup(@Valid @RequestBody UserSignUpRequestVO user) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(authorizationService.signup(user));
+	public ResponseEntity<OperationSuccessVO> signup(@Valid @RequestBody UserSignUpRequestVO user) {
+		authorizationService.signup(user);
+		return ResponseEntity.status(HttpStatus.CREATED).body(new OperationSuccessVO());
 	}
 
 	@PostMapping(SIGNIN)

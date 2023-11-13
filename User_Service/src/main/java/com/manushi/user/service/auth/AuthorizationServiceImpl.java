@@ -61,7 +61,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
 	@Override
 	@Transactional
-	public UserDetailsVO signup(UserSignUpRequestVO userSignUpRequestVO) {
+	public void signup(UserSignUpRequestVO userSignUpRequestVO) {
 		// Validate request object
 		validator.validate(userSignUpRequestVO);
 		Roles role = roleRepository.findByRoleName(userSignUpRequestVO.getRole());
@@ -80,10 +80,13 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 			vendor = vendorRepository.save(vendor);
 			log.info("Vendor successfully created with name - {} ", vendor.getVendorName());
 		}
-		Users user = Users.builder().email(userSignUpRequestVO.getEmail()).name(userSignUpRequestVO.getName()).userName(userSignUpRequestVO.getUsername()).password(passwordEncoder.encode(userSignUpRequestVO.getPassword())).role(role).vendor(vendor).build();
+		Users user = Users.builder().email(userSignUpRequestVO.getEmail()).name(userSignUpRequestVO.getName())
+				.userName(userSignUpRequestVO.getUsername()).password(passwordEncoder.encode(userSignUpRequestVO.getPassword())).role(role)
+				.vendor(vendor).build();
 		userRepository.save(user);
 		log.info("User successfully created with username - {} ", user.getUserName());
-		UserDetailsVO.UserDetailsVOBuilder userDetailsBuilder = UserDetailsVO.builder().email(user.getEmail()).name(user.getName()).role(user.getRole().getRoleName()).username(user.getUserName());
+		UserDetailsVO.UserDetailsVOBuilder userDetailsBuilder = UserDetailsVO.builder().email(user.getEmail()).name(user.getName())
+				.role(user.getRole().getRoleName()).username(user.getUserName());
 
 		if (user.getVendor() != null) {
 			userDetailsBuilder.vendor(user.getVendor().getVendorName());
@@ -91,7 +94,6 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 
 		UserDetailsVO userDetails = userDetailsBuilder.build();
 
-		return userDetails;
 	}
 
 	@Override

@@ -71,9 +71,6 @@ public class CategoryServiceImplTest {
 		// Act
 		assertDoesNotThrow(() -> categoryService.createCategory(categoryRequestVO));
 
-		// Assert
-		// No need to use verify. If there are no exceptions, the method is successfully
-		// called.
 	}
 
 	@Test

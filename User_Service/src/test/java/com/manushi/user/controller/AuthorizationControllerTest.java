@@ -2,6 +2,7 @@ package com.manushi.user.controller;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
@@ -17,7 +18,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import com.manushi.user.model.request.UserSignInRequestVO;
 import com.manushi.user.model.request.UserSignUpRequestVO;
 import com.manushi.user.model.response.JwtResponse;
-import com.manushi.user.model.response.UserDetailsVO;
+import com.manushi.user.model.response.OperationSuccessVO;
 import com.manushi.user.service.auth.AuthorizationService;
 
 @ExtendWith(MockitoExtension.class)
@@ -32,14 +33,15 @@ public class AuthorizationControllerTest {
 	@Test
 	public void testSignup_Success() {
 		UserSignUpRequestVO user = new UserSignUpRequestVO();
-		UserDetailsVO userDetails = new UserDetailsVO(); // You need to create a UserDetailsVO with sample data here.
 
-		when(authorizationService.signup(user)).thenReturn(userDetails);
+		doNothing().when(authorizationService).signup(user);
 
-		ResponseEntity<UserDetailsVO> response = authorizationController.signup(user);
+		// Act
+		ResponseEntity<OperationSuccessVO> response = authorizationController.signup(user);
 
+		// Assert
 		assertEquals(HttpStatus.CREATED, response.getStatusCode());
-		assertEquals(userDetails, response.getBody());
+		assertEquals(new OperationSuccessVO(), response.getBody());
 	}
 
 	@Test

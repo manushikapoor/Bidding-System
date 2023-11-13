@@ -1,5 +1,6 @@
 package com.manushi.user.service.auth;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -23,7 +24,6 @@ import com.manushi.user.exceptions.DataNotFoundException;
 import com.manushi.user.model.request.UserSignInRequestVO;
 import com.manushi.user.model.request.UserSignUpRequestVO;
 import com.manushi.user.model.response.JwtResponse;
-import com.manushi.user.model.response.UserDetailsVO;
 import com.manushi.user.repository.RoleRepository;
 import com.manushi.user.repository.UserRepository;
 import com.manushi.user.repository.VendorRepository;
@@ -66,7 +66,8 @@ public class AuthorizationServiceImplTest {
 	@BeforeEach
 	void setUp() {
 		// Resetting the Mockito mocks before each test
-		org.mockito.Mockito.reset(userRepository, vendorRepository, roleRepository, validator, passwordEncoder, jwtUtil, userDetailsService, bCryptPasswordEncoder);
+		org.mockito.Mockito.reset(userRepository, vendorRepository, roleRepository, validator, passwordEncoder, jwtUtil, userDetailsService,
+				bCryptPasswordEncoder);
 	}
 
 	@Test
@@ -101,11 +102,8 @@ public class AuthorizationServiceImplTest {
 		when(userRepository.save(any(Users.class))).thenReturn(user);
 
 		// Act
-		UserDetailsVO userDetailsVO = authorizationService.signup(userSignUpRequestVO);
+		assertDoesNotThrow(() -> authorizationService.signup(userSignUpRequestVO));
 
-		// Assert
-		assertNotNull(userDetailsVO);
-		// Add more assertions as needed
 	}
 
 	@Test
@@ -140,12 +138,8 @@ public class AuthorizationServiceImplTest {
 		when(userRepository.save(any(Users.class))).thenReturn(user);
 		when(vendorRepository.save(any(Vendors.class))).thenReturn(vendor);
 
-		// Act
-		UserDetailsVO userDetailsVO = authorizationService.signup(userSignUpRequestVO);
+		assertDoesNotThrow(() -> authorizationService.signup(userSignUpRequestVO));
 
-		// Assert
-		assertNotNull(userDetailsVO);
-		// Add more assertions as needed
 	}
 
 	@Test
@@ -175,11 +169,8 @@ public class AuthorizationServiceImplTest {
 		when(roleRepository.findByRoleName(userSignUpRequestVO.getRole())).thenReturn(role);
 
 		// Act
-		UserDetailsVO userDetailsVO = authorizationService.signup(userSignUpRequestVO);
+		assertDoesNotThrow(() -> authorizationService.signup(userSignUpRequestVO));
 
-		// Assert
-		assertNotNull(userDetailsVO);
-		// Add more assertions as needed
 	}
 
 	@Test
@@ -193,7 +184,8 @@ public class AuthorizationServiceImplTest {
 		user.setUserName("testuser");
 		user.setPassword("$2a$10$JmITtU0ePjhsrCKcR5QyjeF/mnK2Hfb5J9sNcXelj2Qx2XzPm/Bsy"); // BCrypt hashed password
 
-		UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(user.getUserName()).password(user.getPassword()).authorities("ROLE_USER").build();
+		UserDetails userDetails = org.springframework.security.core.userdetails.User.withUsername(user.getUserName()).password(user.getPassword())
+				.authorities("ROLE_USER").build();
 
 		when(userRepository.findByUserName(userSignInRequestVO.getUsername())).thenReturn(user);
 		when(bCryptPasswordEncoder.matches(userSignInRequestVO.getPassword(), user.getPassword())).thenReturn(true);

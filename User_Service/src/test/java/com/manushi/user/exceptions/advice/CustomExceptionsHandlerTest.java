@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.MethodParameter;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
@@ -29,12 +32,16 @@ import com.manushi.user.util.Constants;
 import jakarta.validation.ConstraintViolation;
 import jakarta.validation.ConstraintViolationException;
 
+@ExtendWith(MockitoExtension.class)
 public class CustomExceptionsHandlerTest {
+
+	@InjectMocks
+	private CustomExceptionsHandler handler;
 
 	@Test
 	public void handleInvalidRequestException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		InvalidRequestException exception = new InvalidRequestException("Invalid request");
 
 		// Act
@@ -47,7 +54,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleConstraintViolationException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		ConstraintViolationException exception = mock(ConstraintViolationException.class);
 		Set<ConstraintViolation<?>> violations = new HashSet<>();
 		ConstraintViolation<?> violation = mock(ConstraintViolation.class);
@@ -65,7 +72,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleDuplicateDataException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		DuplicateDataException exception = new DuplicateDataException("Duplicate data");
 
 		// Act
@@ -78,7 +85,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleDataNotFoundException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		DataNotFoundException exception = new DataNotFoundException("Data not found");
 
 		// Act
@@ -91,7 +98,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleBadCredentialsException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		BadCredentialsException exception = new BadCredentialsException("Bad credentials");
 
 		// Act
@@ -104,7 +111,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleInvalidDateTimeException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		DateTimeParseException exception = new DateTimeParseException("Invalid date", "format", 1);
 
 		// Act
@@ -117,7 +124,7 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void handleDataAccessException() {
 		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		DataAccessException exception = new DataAccessException("Data access exception") {
 		};
 
@@ -130,8 +137,7 @@ public class CustomExceptionsHandlerTest {
 
 	@Test
 	public void handleException() {
-		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
+
 		InvalidRequestException exception = new InvalidRequestException("Generic exception");
 
 		// Act
@@ -143,8 +149,6 @@ public class CustomExceptionsHandlerTest {
 
 	@Test
 	public void testHandleMethodArgumentNotValidException() {
-		// Arrange
-		CustomExceptionsHandler handler = new CustomExceptionsHandler();
 
 		// Create a BindingResult with field errors
 		BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "objectName");

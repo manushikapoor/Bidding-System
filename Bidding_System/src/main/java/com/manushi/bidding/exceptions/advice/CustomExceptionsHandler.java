@@ -19,6 +19,7 @@ import org.springframework.dao.DataAccessResourceFailureException;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindingResult;
@@ -47,7 +48,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class CustomExceptionsHandler {
 
-	@ExceptionHandler({ InvalidRequestException.class, MissingServletRequestParameterException.class, HttpClientErrorException.class })
+	@ExceptionHandler({ InvalidRequestException.class, MissingServletRequestParameterException.class, HttpClientErrorException.class,
+			HttpMessageNotReadableException.class })
 	@ResponseStatus(HttpStatus.BAD_REQUEST)
 	public final ResponseEntity<ErrorVO> handleInvalidRequestException(Exception ex) {
 		log.info("BadRequestException occurred- message: [{}], error code: [{}]", ex.getMessage(), ERROR_CODE_INVALID_REQUEST_EXCEPTION);

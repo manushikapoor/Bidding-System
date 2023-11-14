@@ -24,8 +24,10 @@ import com.manushi.product.util.RequestValidator;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class CategoryServiceImpl implements CategoryService {
 
@@ -47,7 +49,7 @@ public class CategoryServiceImpl implements CategoryService {
 	@Override
 	public List<CategoryVO> getAllCategories() {
 		List<CategoryVO> categoryVOs = categoryRepository.findAll().stream().map(this::convertToCategoryVO).collect(Collectors.toList());
-
+		log.debug("categories - {}", categoryVOs);
 		return categoryVOs;
 	}
 
@@ -58,6 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
 		Category category = Category.builder().name(categoryDetails.getName()).build();
 
 		categoryRepository.save(category);
+		log.info("category successfully created - {}", category);
 	}
 
 	@Override
@@ -68,6 +71,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 		existingCategory.setName(categoryDetails.getName());
 		categoryRepository.save(existingCategory);
+		log.info("category successfully updated - {}", existingCategory);
 	}
 
 	@Override
@@ -77,15 +81,17 @@ public class CategoryServiceImpl implements CategoryService {
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_CATEGORY_NOT_FOUND + categoryId));
 		// Find all products with the category
 		List<Products> productsWithCategory = productsRepository.findProductsByCategory(existingCategory);
-
+		log.debug("Products with category to be deleted - {}", productsWithCategory);
 		for (Products product : productsWithCategory) {
 			// Find all related bids for the product
 			List<Bids> productBids = bidRepository.findByProductId(product.getId());
+			log.debug("Bids under category to be deleted - {}", productBids);
 			if (productBids != null) {
 				bidRepository.deleteAll(productBids);
 			}
 			// Find the related auction for the product (if exists) and delete it
 			Auctions productAuction = auctionRepository.findByProductId(product.getId());
+			log.debug("Auctions under category to be deleted - {}", productAuction);
 			if (productAuction != null) {
 				auctionRepository.delete(productAuction);
 			}
@@ -96,6 +102,7 @@ public class CategoryServiceImpl implements CategoryService {
 
 		// Delete the category
 		categoryRepository.delete(existingCategory);
+		log.info("Category successfully deleted - {}", existingCategory);
 	}
 
 	private CategoryVO convertToCategoryVO(Category category) {

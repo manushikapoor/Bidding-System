@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,7 +17,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import com.manushi.product.exceptions.DuplicateDataException;
+import com.manushi.product.exceptions.InvalidRequestException;
 import com.manushi.product.model.request.CategoryRequestVO;
+import com.manushi.product.model.request.ProductRequestVO;
 import com.manushi.product.repository.CategoryRepository;
 import com.manushi.product.repository.entity.Category;
 
@@ -83,5 +86,29 @@ public class RequestValidatorTest {
 		DuplicateDataException exception = assertThrows(DuplicateDataException.class,
 				() -> requestValidator.validateCategoryRequestVO(categoryRequestVO));
 		assertEquals("category already exists", exception.getMessage());
+	}
+
+	@Test
+	public void testValidateProductRequestVO() {
+		// Arrange
+		ProductRequestVO productRequestVO = new ProductRequestVO();
+		BigDecimal amount = new BigDecimal(100);
+		productRequestVO.setBasePrice(amount);
+
+		// Act & Assert
+		assertDoesNotThrow(() -> requestValidator.validateProductRequestVO(productRequestVO.getBasePrice()));
+	}
+
+	@Test
+	public void testValidateProductRequestVOInvalid() {
+		// Arrange
+		ProductRequestVO productRequestVO = new ProductRequestVO();
+		BigDecimal amount = new BigDecimal(0);
+		productRequestVO.setBasePrice(amount);
+
+		// Act & Assert
+		InvalidRequestException exception = assertThrows(InvalidRequestException.class,
+				() -> requestValidator.validateProductRequestVO(productRequestVO.getBasePrice()));
+		assertEquals("Base price can't be less than 0", exception.getMessage());
 	}
 }

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.manushi.product.repository.enums.ProductStatus;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -37,7 +36,4 @@ public class ProductRequestVO {
 	@JsonProperty("bid_end_time")
 	private LocalDateTime bidEndTime;
 
-	@NotNull(message = "status is required")
-	@JsonProperty("status")
-	private ProductStatus status;
 }

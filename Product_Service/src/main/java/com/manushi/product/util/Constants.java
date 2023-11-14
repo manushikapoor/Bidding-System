@@ -23,5 +23,6 @@ public class Constants {
 	public static final String ERROR_MESSAGE_USERNAME_NOT_FOUND = "username not found";
 	public static final String ERROR_MESSAGE_CATEGORY_EXISTS = "category already exists";
 	public static final String ERROR_MESSAGE_CATEGORY_NOT_FOUND = "Category not found";
+	public static final String ERROR_MESSAGE_INVALID_BASE_PRICE = "Base price can't be less than 0";
 
 }

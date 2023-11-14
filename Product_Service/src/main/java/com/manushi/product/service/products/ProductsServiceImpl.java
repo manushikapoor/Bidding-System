@@ -33,8 +33,10 @@ import com.manushi.product.util.RequestValidator;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class ProductsServiceImpl implements ProductsService {
 
@@ -60,6 +62,8 @@ public class ProductsServiceImpl implements ProductsService {
 	@Transactional
 	public void createProduct(ProductRequestVO productRequestVO) {
 
+		requestValidator.validateProductRequestVO(productRequestVO.getBasePrice());
+
 		if (!requestValidator.isDateRangeValid(productRequestVO.getBidStartTime(), productRequestVO.getBidEndTime())) {
 			throw new InvalidRequestException(ERROR_MESSAGE_INVALID_DATES);
 		}
@@ -76,6 +80,7 @@ public class ProductsServiceImpl implements ProductsService {
 				.listingDate(LocalDateTime.now()).status(ProductStatus.ACTIVE).build();
 
 		productsRepository.save(product);
+		log.info("Product created successfully - {}", product);
 
 	}
 
@@ -87,6 +92,7 @@ public class ProductsServiceImpl implements ProductsService {
 		}
 		List<Products> products = productsRepository.findByCategoryAndBidStartTimeLessThanEqualAndBidEndTimeGreaterThanEqual(category,
 				LocalDateTime.now(), LocalDateTime.now());
+		log.debug("Products details - {}", products);
 		return products.stream().map(this::convertToProductVO).collect(Collectors.toList());
 	}
 
@@ -100,7 +106,12 @@ public class ProductsServiceImpl implements ProductsService {
 		existingProduct.setName(productDetails.getName());
 		existingProduct.setBasePrice(productDetails.getBasePrice());
 
+		existingProduct.setBidEndTime(existingProduct.getBidEndTime());
+		existingProduct.setBidStartTime(existingProduct.getBidStartTime());
+		existingProduct.setListingDate(existingProduct.getListingDate());
+		log.debug("Updated Product - {}", existingProduct);
 		productsRepository.save(existingProduct);
+		log.info("Product successfully updated - {}", existingProduct);
 	}
 
 	@Override
@@ -111,37 +122,42 @@ public class ProductsServiceImpl implements ProductsService {
 
 		// Find all related bids for the product
 		List<Bids> productBids = bidRepository.findByProductId(existingProduct.getId());
+		log.debug("Bids related to the product - {}", productBids);
 		if (productBids != null) {
 			bidRepository.deleteAll(productBids);
 		}
 		// Find the related auction for the product (if exists) and delete it
 		Auctions productAuction = auctionRepository.findByProductId(existingProduct.getId());
+		log.debug("Auctions related to the product - {}", productAuction);
 		if (productAuction != null) {
 			auctionRepository.delete(productAuction);
 		}
 
 		// Delete the product
 		productsRepository.delete(existingProduct);
+		log.info("Product successfully deleted - {}", existingProduct);
 	}
 
 	@Override
 	public ProductVO getProductById(Long productId) {
 		Products product = productsRepository.findById(productId)
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_PRODUCT_NOT_FOUND + productId));
-
+		log.debug("product - {}", product);
 		return convertToProductVO(product);
 	}
 
 	@Override
 	public List<ProductVO> getAllProducts() {
 		List<Products> products = productsRepository.findAll();
+		log.debug("products - {}", products);
 		return products.stream().map(this::convertToProductVO).collect(Collectors.toList());
 	}
 
 	private ProductVO convertToProductVO(Products product) {
 
-		ProductVO productVO = ProductVO.builder().name(product.getName()).basePrice(product.getBasePrice().toString())
-				.bidEndTime(product.getBidEndTime()).bidStartTime(product.getBidStartTime()).listingDate(product.getListingDate()).build();
+		ProductVO productVO = ProductVO.builder().id(product.getId()).name(product.getName()).basePrice(product.getBasePrice().toString())
+				.bidEndTime(product.getBidEndTime()).bidStartTime(product.getBidStartTime()).listingDate(product.getListingDate())
+				.status(product.getStatus().name()).build();
 		if (product.getUser() != null) {
 			productVO.setVendor(product.getUser().getName());
 		}

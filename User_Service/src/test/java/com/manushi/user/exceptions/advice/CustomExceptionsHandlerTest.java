@@ -150,15 +150,10 @@ public class CustomExceptionsHandlerTest {
 	@Test
 	public void testHandleMethodArgumentNotValidException() {
 
-		// Create a BindingResult with field errors
 		BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "objectName");
 		bindingResult.addError(new FieldError("fieldName", "errorCode", "error message"));
 
-		// Create a MethodParameter (can be null in this case)
 		MethodParameter methodParameter = null;
-
-		// Create a MethodArgumentNotValidException with MethodParameter and
-		// BindingResult
 		MethodArgumentNotValidException ex = new MethodArgumentNotValidException(methodParameter, bindingResult);
 
 		// Act

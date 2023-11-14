@@ -93,6 +93,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 		}
 
 		UserDetailsVO userDetails = userDetailsBuilder.build();
+		log.debug("User details - {}", userDetails);
 
 	}
 
@@ -123,6 +124,7 @@ public class AuthorizationServiceImpl implements AuthorizationService {
 			if (user != null && user.getRole() != null) {
 				// User and role exist
 				log.info("Token validated for user - {} ", user.getUserName());
+				log.debug("Role of user - {}", user.getRole().getRoleName());
 				return user.getRole().getRoleName();
 			}
 		}

@@ -33,6 +33,7 @@ import com.manushi.product.repository.UsersRepository;
 import com.manushi.product.repository.entity.Category;
 import com.manushi.product.repository.entity.Products;
 import com.manushi.product.repository.entity.Users;
+import com.manushi.product.repository.enums.ProductStatus;
 import com.manushi.product.util.RequestValidator;
 
 @ExtendWith(MockitoExtension.class)
@@ -187,6 +188,7 @@ public class ProductsServiceImplTest {
 		Long productId = 1L;
 		Products existingProduct = new Products();
 		existingProduct.setId(productId);
+		existingProduct.setStatus(ProductStatus.ACTIVE);
 		BigDecimal basePrice = new BigDecimal(100.00);
 		existingProduct.setBasePrice(basePrice);
 
@@ -220,7 +222,9 @@ public class ProductsServiceImplTest {
 		Products product2 = new Products();
 		BigDecimal basePrice = new BigDecimal(100.00);
 		product1.setBasePrice(basePrice);
+		product1.setStatus(ProductStatus.ACTIVE);
 		product2.setBasePrice(basePrice);
+		product2.setStatus(ProductStatus.ACTIVE);
 
 		when(productsRepository.findAll()).thenReturn(List.of(product1, product2));
 

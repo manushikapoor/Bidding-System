@@ -10,8 +10,8 @@ import com.manushi.bidding.repository.entity.Users;
 
 public interface BidsRepository extends JpaRepository<Bids, Long> {
 
-	List<Bids> findByUserId(Users userId);
+	List<Bids> findByUser(Users userId);
 
-	List<Bids> findByProductId(Products productId);
+	List<Bids> findByProduct(Products productId);
 
 }

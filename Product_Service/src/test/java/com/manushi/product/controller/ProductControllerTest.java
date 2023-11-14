@@ -20,7 +20,7 @@ import com.manushi.product.model.request.ProductRequestVO;
 import com.manushi.product.model.request.ProductUpdateRequestVO;
 import com.manushi.product.model.response.OperationSuccessVO;
 import com.manushi.product.model.response.ProductVO;
-import com.manushi.product.service.authorization.AuthorizationHandlerService;
+import com.manushi.product.service.authorization.AuthorizationHandlerServiceImpl;
 import com.manushi.product.service.products.ProductsService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,7 +35,7 @@ public class ProductControllerTest {
 	private ProductsService productService;
 
 	@Mock
-	private AuthorizationHandlerService authorizationHandlerService;
+	private AuthorizationHandlerServiceImpl authorizationHandlerService;
 
 	@Test
 	public void createProductTest() {

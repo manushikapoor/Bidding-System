@@ -1,6 +1,8 @@
 package com.manushi.bidding.controller;
 
 import static com.manushi.bidding.util.Constants.BIDS;
+import static com.manushi.bidding.util.Constants.EMAIL_SENT_TO_QUEUE;
+import static com.manushi.bidding.util.Constants.EMAIL_SUCCESSULLY_SENT;
 import static com.manushi.bidding.util.Constants.NOTIFY;
 import static com.manushi.bidding.util.Constants.SEND_MAIL;
 import static com.manushi.bidding.util.Constants.V1;
@@ -16,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.manushi.bidding.model.request.SendGridEmailMessage;
+import com.manushi.bidding.model.request.QueueEmailMessage;
 import com.manushi.bidding.service.email.EmailProducerImpl;
 import com.manushi.bidding.service.products.ProductServiceImpl;
 
@@ -39,13 +41,13 @@ public class EmailController {
 	@PostMapping(NOTIFY)
 	public ResponseEntity<String> sendEmailToWinners(HttpServletRequest request) {
 		productServiceImpl.sendMailToWinners(LocalDateTime.now());
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Email sent to all the winners.");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(EMAIL_SUCCESSULLY_SENT);
 	}
 
 	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
 	@PostMapping(SEND_MAIL)
-	public ResponseEntity<String> sendEmail(HttpServletRequest request, @Valid @RequestBody SendGridEmailMessage emailMessage) {
+	public ResponseEntity<String> sendEmail(HttpServletRequest request, @Valid @RequestBody QueueEmailMessage emailMessage) {
 		emailProducer.sendEmail(emailMessage);
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body("Email sent to SendGrid.");
+		return ResponseEntity.status(HttpStatus.ACCEPTED).body(EMAIL_SENT_TO_QUEUE);
 	}
 }

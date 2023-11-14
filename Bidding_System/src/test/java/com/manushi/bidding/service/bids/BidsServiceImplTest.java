@@ -143,7 +143,7 @@ public class BidsServiceImplTest {
 
 		// Mock repository methods
 		when(usersRepository.findByUserName("testuser")).thenReturn(user);
-		when(bidsRepository.findByUserId(user)).thenReturn(bidsList);
+		when(bidsRepository.findByUser(user)).thenReturn(bidsList);
 
 		// Call the method to be tested
 		List<BidVO> bidVOList = bidsService.getBidsByUserName("testuser");

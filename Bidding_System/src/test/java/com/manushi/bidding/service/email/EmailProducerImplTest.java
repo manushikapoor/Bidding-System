@@ -8,7 +8,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.amqp.core.DirectExchange;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 
-import com.manushi.bidding.model.request.SendGridEmailMessage;
+import com.manushi.bidding.model.request.QueueEmailMessage;
 
 @ExtendWith(MockitoExtension.class)
 class EmailProducerImplTest {
@@ -25,7 +25,7 @@ class EmailProducerImplTest {
 	@Test
 	void sendEmail_Success() {
 		// Arrange
-		SendGridEmailMessage emailMessage = new SendGridEmailMessage();
+		QueueEmailMessage emailMessage = new QueueEmailMessage();
 		emailMessage.setContent("content");
 		emailMessage.setSubject("subject");
 		emailMessage.setTo("to");

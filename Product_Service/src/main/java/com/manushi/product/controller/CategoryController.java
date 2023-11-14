@@ -35,22 +35,23 @@ public class CategoryController {
 	@Autowired
 	private final CategoryService categoryService;
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true")
 	@PostMapping()
 	public ResponseEntity<OperationSuccessVO> createCategory(HttpServletRequest request, @Valid @RequestBody CategoryRequestVO categoryDetails) {
 		categoryService.createCategory(categoryDetails);
 		return ResponseEntity.status(HttpStatus.CREATED).body(new OperationSuccessVO());
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'user')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'user')== true")
 	@GetMapping()
 	public ResponseEntity<List<CategoryVO>> getCategories(HttpServletRequest request) {
 
 		return ResponseEntity.ok(categoryService.getAllCategories());
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true")
 	@PatchMapping("/{categoryId}")
 	public ResponseEntity<OperationSuccessVO> updateCategory(HttpServletRequest request, @PathVariable Long categoryId,
 			@Valid @RequestBody CategoryRequestVO categoryDetails) {
@@ -58,7 +59,7 @@ public class CategoryController {
 		return ResponseEntity.ok(new OperationSuccessVO());
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true")
 	@DeleteMapping("/{categoryId}")
 	public ResponseEntity<OperationSuccessVO> deleteCategory(HttpServletRequest request, @PathVariable Long categoryId) {
 		categoryService.deleteCategory(categoryId);

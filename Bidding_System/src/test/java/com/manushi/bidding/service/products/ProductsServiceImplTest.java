@@ -73,13 +73,11 @@ class ProductServiceImplTest {
 		verify(emailProducerMock, never()).sendEmail(any());
 	}
 
-	// Add more test cases as needed
-
 	private Products createTestProduct(String productName) {
 		Products product = new Products();
 		product.setId(1L);
 		product.setName(productName);
-		// Set other properties as needed
+
 		return product;
 	}
 
@@ -87,7 +85,7 @@ class ProductServiceImplTest {
 		Users user = new Users();
 		user.setName(name);
 		user.setEmail(email);
-		// Set other properties as needed
+
 		return user;
 	}
 

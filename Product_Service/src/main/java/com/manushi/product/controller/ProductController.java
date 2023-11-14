@@ -38,7 +38,7 @@ public class ProductController {
 	@Autowired
 	private final ProductsService productService;
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true")
 	@PostMapping()
 	public ResponseEntity<OperationSuccessVO> createProduct(HttpServletRequest request, @Valid @RequestBody ProductRequestVO productDetails) {
 		productService.createProduct(productDetails);
@@ -46,33 +46,33 @@ public class ProductController {
 
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'user')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'user')== true")
 	@GetMapping(CATEGORY)
 	public ResponseEntity<List<ProductVO>> getProductsByCategory(HttpServletRequest request, @RequestParam("category") String category) {
 
 		return ResponseEntity.ok(productService.getAllProductsByCategory(category));
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true")
 	@GetMapping("/{productId}")
 	public ResponseEntity<ProductVO> getProductById(HttpServletRequest request, @PathVariable Long productId) {
 		ProductVO product = productService.getProductById(productId);
 		return ResponseEntity.ok(product);
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'admin')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true "
-			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'user')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'admin')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true "
+			+ "or @tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'user')== true")
 	@GetMapping()
 	public ResponseEntity<List<ProductVO>> getAllProducts(HttpServletRequest request) {
 		List<ProductVO> products = productService.getAllProducts();
 		return ResponseEntity.ok(products);
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true")
 	@PatchMapping("/{productId}")
 	public ResponseEntity<OperationSuccessVO> updateProduct(HttpServletRequest request, @PathVariable Long productId,
 			@Valid @RequestBody ProductUpdateRequestVO productDetails) {
@@ -80,7 +80,7 @@ public class ProductController {
 		return ResponseEntity.ok(new OperationSuccessVO());
 	}
 
-	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerService.getAuthorizationHeader(#request), 'vendor')== true")
+	@PreAuthorize("@tokenAuthorization.validateTokenAndCheckRole(@authorizationHandlerServiceImpl.getAuthorizationHeader(#request), 'vendor')== true")
 	@DeleteMapping("/{productId}")
 	public ResponseEntity<OperationSuccessVO> deleteProduct(HttpServletRequest request, @PathVariable Long productId) {
 		productService.deleteProduct(productId);

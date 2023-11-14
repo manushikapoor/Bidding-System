@@ -19,7 +19,7 @@ import org.springframework.mock.web.MockHttpServletRequest;
 import com.manushi.product.model.request.CategoryRequestVO;
 import com.manushi.product.model.response.CategoryVO;
 import com.manushi.product.model.response.OperationSuccessVO;
-import com.manushi.product.service.authorization.AuthorizationHandlerService;
+import com.manushi.product.service.authorization.AuthorizationHandlerServiceImpl;
 import com.manushi.product.service.categories.CategoryService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -34,7 +34,7 @@ public class CategoryControllerTest {
 	private CategoryService categoryService;
 
 	@Mock
-	private AuthorizationHandlerService authorizationHandlerService;
+	private AuthorizationHandlerServiceImpl authorizationHandlerService;
 
 	@Test
 	public void createCategoryTest() {

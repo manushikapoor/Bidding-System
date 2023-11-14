@@ -27,4 +27,7 @@ public class Constants {
 	public static final String ERROR_MESSAGE_BID_AMOUNT = "Bid amount can't be less than the product base price";
 	public static final String ERROR_MESSAGE_USER_NOT_FOUND = "User not found";
 
+	public static final String EMAIL_SUCCESSULLY_SENT = "Email sent to all the winners.";
+	public static final String EMAIL_SENT_TO_QUEUE = "Email sent to queue.";
+
 }

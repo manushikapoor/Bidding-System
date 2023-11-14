@@ -11,7 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import com.manushi.bidding.model.request.SendGridEmailMessage;
+import com.manushi.bidding.model.request.QueueEmailMessage;
 import com.manushi.bidding.service.email.EmailProducerImpl;
 import com.manushi.bidding.service.products.ProductServiceImpl;
 
@@ -48,8 +48,8 @@ public class EmailControllerTest {
 		// Create a mock HttpServletRequest
 		HttpServletRequest request = mock(HttpServletRequest.class);
 
-		// Create a sample SendGridEmailMessage
-		SendGridEmailMessage emailMessage = new SendGridEmailMessage();
+		// Create a sample QueueEmailMessage
+		QueueEmailMessage emailMessage = new QueueEmailMessage();
 		emailMessage.setTo("to");
 		emailMessage.setContent("content");
 		emailMessage.setSubject("sub");
@@ -60,6 +60,6 @@ public class EmailControllerTest {
 		// Assert the HTTP status code
 		assertEquals(HttpStatus.ACCEPTED, response.getStatusCode());
 		// Assert the response body
-		assertEquals("Email sent to SendGrid.", response.getBody());
+		assertEquals("Email sent to queue.", response.getBody());
 	}
 }

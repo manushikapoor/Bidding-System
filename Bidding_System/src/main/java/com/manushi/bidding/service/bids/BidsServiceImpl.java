@@ -26,8 +26,10 @@ import com.manushi.bidding.repository.entity.Users;
 import com.manushi.bidding.util.RequestValidator;
 
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@Slf4j
 @AllArgsConstructor
 public class BidsServiceImpl implements BidsService {
 
@@ -56,17 +58,18 @@ public class BidsServiceImpl implements BidsService {
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_USER_NOT_FOUND + bidRequestVO.getUserId()));
 
 		requestValidator.validateBidRequestVO(bidRequestVO.getAmount(), product.getBidStartTime(), product.getBidEndTime(), product.getBasePrice());
-
+		log.debug("Bid request successfully validated");
 		Bids bid = Bids.builder().product(product).user(user).amount(bidRequestVO.getAmount()).bidStartTime(LocalDateTime.now()).build();
 
 		bidsRepository.save(bid);
-
+		log.info("Bid successfully created - {}", bid);
 		createAuction(product, user, bidRequestVO.getAmount());
 	}
 
 	@Override
 	public List<BidVO> getAllBids() {
 		List<Bids> bids = bidsRepository.findAll();
+		log.debug("Bids details - {}", bids);
 		return bids.stream().map(bid -> new BidVO(bid.getUser().getUserName(), bid.getProduct().getName(), bid.getProduct().getId(),
 				bid.getAmount().toString(), bid.getBidStartTime())).collect(Collectors.toList());
 	}
@@ -77,7 +80,8 @@ public class BidsServiceImpl implements BidsService {
 		if (user == null) {
 			throw new DataNotFoundException(ERROR_MESSAGE_USER_NOT_FOUND + username);
 		}
-		List<Bids> bids = bidsRepository.findByUserId(user);
+		List<Bids> bids = bidsRepository.findByUser(user);
+		log.debug("Bids details - {}", bids);
 		return bids.stream().map(bid -> new BidVO(bid.getUser().getUserName(), bid.getProduct().getName(), bid.getProduct().getId(),
 				bid.getAmount().toString(), bid.getBidStartTime())).collect(Collectors.toList());
 	}
@@ -87,7 +91,8 @@ public class BidsServiceImpl implements BidsService {
 
 		Products product = productsRepository.findById(productId)
 				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_PRODUCT_NOT_FOUND + productId));
-		List<Bids> bids = bidsRepository.findByProductId(product);
+		List<Bids> bids = bidsRepository.findByProduct(product);
+		log.debug("Bids details - {}", bids);
 		return bids.stream().map(bid -> new BidVO(bid.getUser().getUserName(), bid.getProduct().getName(), bid.getProduct().getId(),
 				bid.getAmount().toString(), bid.getBidStartTime())).collect(Collectors.toList());
 	}
@@ -98,14 +103,17 @@ public class BidsServiceImpl implements BidsService {
 		if (auction == null) {
 			// If there is no existing auction for this product, create a new auction entry
 			auction = Auctions.builder().product(product).userId(user).currHighestBid(currHighestBid).build();
+			log.debug("New auction entry created - {}", auction);
 		} else if (currHighestBid.compareTo(auction.getCurrHighestBid()) > 0) {
 			// If an auction already exists, check if the new bid is higher
 			// Update the current highest bid and user
 			auction.setUserId(user);
 			auction.setCurrHighestBid(currHighestBid);
+			log.info("Current highest bid and current winner updated - {}", auction);
 		}
 
 		auctionRepository.save(auction);
+		log.info("Auction successfully created/updated - {}", auction);
 	}
 
 }

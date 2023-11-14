@@ -29,6 +29,7 @@ public class RequestValidatorTest {
 		UserSignUpRequestVO user = new UserSignUpRequestVO();
 		user.setUsername("testuser");
 		user.setEmail("testuser@example.com");
+		user.setRole("vendor");
 
 		when(userRepository.existsByUserName("testuser")).thenReturn(false);
 		when(userRepository.existsByEmail("testuser@example.com")).thenReturn(false);
@@ -50,6 +51,23 @@ public class RequestValidatorTest {
 		try {
 			requestValidator.validate(user);
 		} catch (DuplicateDataException e) {
+			verify(userRepository, times(1)).existsByUserName("testuser");
+		}
+	}
+
+	@Test
+	public void testValidate_VendorNotAllowed() {
+		UserSignUpRequestVO user = new UserSignUpRequestVO();
+		user.setUsername("testuser");
+		user.setEmail("testuser@example.com");
+		user.setRole("user");
+		user.setVendor("Nike");
+
+		when(userRepository.existsByUserName("testuser")).thenReturn(false);
+
+		try {
+			requestValidator.validate(user);
+		} catch (InvalidRequestException e) {
 			verify(userRepository, times(1)).existsByUserName("testuser");
 		}
 	}

@@ -22,6 +22,9 @@ public class Constants {
 	public static final String ERROR_MSG_INVALID_EMAIL = "Invalid email";
 	public static final String ERROR_MSG_INVALID_PASSWORD = "Invalid password";
 	public static final String ERROR_MSG_INVALID_JWT_TOKEN = "Invalid JWT Token";
+	public static final String ERROR_MSG_VENDOR_NOT_ALLOWED = "Only vendor can have a vendor field";
+
+	public static final String VENDOR = "vendor";
 
 	public static final String EMAIL_VALIDATION_REGEX = "\\b[A-Za-z0-9'._-]+@[A-Za-z0-9'.-]+\\.[A-Za-z0-9._-]+\\b";
 

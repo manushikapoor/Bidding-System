@@ -3,7 +3,9 @@ package com.manushi.user.util;
 import static com.manushi.user.util.Constants.EMAIL_VALIDATION_REGEX;
 import static com.manushi.user.util.Constants.ERROR_EMAIL_EXISTS;
 import static com.manushi.user.util.Constants.ERROR_MSG_INVALID_EMAIL;
+import static com.manushi.user.util.Constants.ERROR_MSG_VENDOR_NOT_ALLOWED;
 import static com.manushi.user.util.Constants.ERROR_USERNAME_TAKEN;
+import static com.manushi.user.util.Constants.VENDOR;
 
 import java.util.regex.Pattern;
 
@@ -35,6 +37,9 @@ public class RequestValidator {
 		}
 		if (userRepository.existsByEmail(user.getEmail())) {
 			throw new DuplicateDataException(ERROR_EMAIL_EXISTS);
+		}
+		if (!user.getRole().equals(VENDOR) && user.getVendor() != null) {
+			throw new InvalidRequestException(ERROR_MSG_VENDOR_NOT_ALLOWED);
 		}
 		log.info("User successfully validated with username - {} ", user.getUsername());
 	}

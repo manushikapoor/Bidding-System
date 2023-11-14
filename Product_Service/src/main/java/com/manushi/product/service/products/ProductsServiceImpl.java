@@ -99,19 +99,11 @@ public class ProductsServiceImpl implements ProductsService {
 	@Override
 	@Transactional
 	public void updateProduct(Long productId, @Valid ProductUpdateRequestVO productDetails) {
-		Products existingProduct = productsRepository.findById(productId)
-				.orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_PRODUCT_NOT_FOUND + productId));
+		productsRepository.findById(productId).orElseThrow(() -> new DataNotFoundException(ERROR_MESSAGE_PRODUCT_NOT_FOUND + productId));
 
-		// Update only the fields that can be modified
-		existingProduct.setName(productDetails.getName());
-		existingProduct.setBasePrice(productDetails.getBasePrice());
+		productsRepository.updateProductNameById(productId, productDetails.getName());
 
-		existingProduct.setBidEndTime(existingProduct.getBidEndTime());
-		existingProduct.setBidStartTime(existingProduct.getBidStartTime());
-		existingProduct.setListingDate(existingProduct.getListingDate());
-		log.debug("Updated Product - {}", existingProduct);
-		productsRepository.save(existingProduct);
-		log.info("Product successfully updated - {}", existingProduct);
+		log.info("Product successfully updated");
 	}
 
 	@Override

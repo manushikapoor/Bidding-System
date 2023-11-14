@@ -22,7 +22,6 @@ import com.manushi.user.model.response.JwtResponse;
 import com.manushi.user.model.response.OperationSuccessVO;
 import com.manushi.user.service.auth.AuthorizationService;
 
-import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
@@ -30,7 +29,6 @@ import lombok.AllArgsConstructor;
 @RestController
 @AllArgsConstructor
 @RequestMapping(V1 + USER)
-@Api(value = "Sample API", description = "Sample API operations")
 public class AuthorizationController {
 
 	@Autowired
